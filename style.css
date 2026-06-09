@@ -1,0 +1,276 @@
+:root {
+  --label-width: 150mm;
+  --label-height: 100mm;
+  --border-width: 1.3mm;
+  --border-radius: 8mm;
+  --paper-bg: #ffffff;
+  --ink: #111111;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  background: #eef1f5;
+  color: #111;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.panel {
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+  position: sticky;
+  top: 20px;
+}
+
+h1 {
+  margin: 0 0 6px;
+  font-size: 26px;
+}
+
+h2 {
+  margin: 18px 0 8px;
+  font-size: 18px;
+}
+
+.subtext,
+.tip {
+  margin: 0 0 14px;
+  color: #555;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.form-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.form-grid.small {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #c8cdd4;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+button {
+  border: 0;
+  border-radius: 9px;
+  padding: 10px 14px;
+  background: #111;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+button.danger {
+  background: #a82020;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #e2e5e9;
+  margin: 20px 0;
+}
+
+.preview-area {
+  min-width: 0;
+}
+
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.preview-header h2 {
+  margin: 0;
+}
+
+#countBadge {
+  background: #111;
+  color: white;
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+.print-area {
+  display: grid;
+  gap: 18px;
+}
+
+.label {
+  width: var(--label-width);
+  height: var(--label-height);
+  background: var(--paper-bg);
+  border: var(--border-width) solid var(--ink);
+  border-radius: var(--border-radius);
+  color: var(--ink);
+  overflow: hidden;
+  page-break-after: always;
+  break-after: page;
+  transform-origin: top left;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  padding: 12mm 12mm 8mm 15mm;
+  position: relative;
+}
+
+.data-row {
+  display: grid;
+  grid-template-columns: 35mm 1fr;
+  align-items: start;
+}
+
+.model-row {
+  height: 34mm;
+}
+
+.sn-row {
+  height: 35mm;
+}
+
+.left-title {
+  font-size: 11.5mm;
+  line-height: 13mm;
+  font-weight: 400;
+  letter-spacing: -0.2mm;
+}
+
+.barcode-block {
+  text-align: center;
+  padding-top: 0.5mm;
+}
+
+.value-text {
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 700;
+  font-size: 10.5mm;
+  line-height: 11.5mm;
+  letter-spacing: 0.25mm;
+  white-space: nowrap;
+}
+
+.barcode {
+  width: 86mm;
+  height: 16.5mm;
+  display: block;
+  margin: 1.8mm auto 0;
+}
+
+.bottom-row {
+  position: absolute;
+  left: 15mm;
+  right: 11mm;
+  bottom: 8mm;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.date-box {
+  font-size: 10.5mm;
+  line-height: 12mm;
+  white-space: nowrap;
+}
+
+.date-title {
+  margin-right: 8mm;
+}
+
+.brand-logo {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11mm;
+  font-weight: 700;
+  letter-spacing: -0.4mm;
+}
+
+@media (max-width: 1000px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    position: static;
+  }
+}
+
+@media print {
+  @page {
+    size: 150mm 100mm;
+    margin: 0;
+  }
+
+  html,
+  body {
+    width: 150mm;
+    margin: 0;
+    padding: 0;
+    background: white;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .app-shell {
+    display: block;
+  }
+
+  .preview-area {
+    margin: 0;
+    padding: 0;
+  }
+
+  .print-area {
+    display: block;
+    gap: 0;
+  }
+
+  .label {
+    margin: 0;
+    box-shadow: none;
+    page-break-after: always;
+    break-after: page;
+  }
+}
