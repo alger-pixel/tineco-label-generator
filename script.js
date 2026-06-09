@@ -87,7 +87,7 @@ function createLabelElement(item) {
           <span>${item.date}</span>
         </div>
 
-        <img src="tineco-logo.png" class="brand-logo" alt="Tineco Logo">
+        <img src="tineco-logo.png" class="brand-logo-img" alt="">
       </div>
 
     </div>
