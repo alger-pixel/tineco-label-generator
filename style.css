@@ -28,7 +28,6 @@ body {
   background: white;
   border-radius: 14px;
   padding: 20px;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
 }
 
 h1 {
@@ -125,7 +124,6 @@ hr {
   transform-origin: top left;
 }
 
-/* Label real size */
 .label {
   width: var(--label-width);
   height: var(--label-height);
@@ -134,8 +132,6 @@ hr {
   border-radius: 8mm;
   color: var(--ink);
   overflow: hidden;
-  page-break-after: always;
-  break-after: page;
 }
 
 .content {
@@ -145,7 +141,6 @@ hr {
   position: relative;
 }
 
-/* Main rows */
 .data-row {
   display: grid;
   grid-template-columns: 34mm 1fr;
@@ -185,7 +180,6 @@ hr {
   margin: 2mm auto 0;
 }
 
-/* Bottom row */
 .bottom-row {
   position: absolute;
   left: 15mm;
@@ -214,7 +208,6 @@ hr {
   display: block;
 }
 
-/* Small screens */
 @media screen and (max-width: 1000px) {
   .app-shell {
     grid-template-columns: 1fr;
@@ -225,7 +218,6 @@ hr {
   }
 }
 
-/* Print must stay real size */
 @media print {
   @page {
     size: 150mm 100mm;
@@ -262,6 +254,8 @@ hr {
 
   .label {
     margin: 0;
+    border: none !important;
+    border-radius: 0 !important;
     box-shadow: none;
   }
 }
