@@ -1,10 +1,8 @@
 :root {
   --label-width: 150mm;
   --label-height: 100mm;
-  --border-width: 1.3mm;
-  --border-radius: 8mm;
-  --paper-bg: #ffffff;
   --ink: #111111;
+  --paper: #ffffff;
 }
 
 * {
@@ -30,9 +28,7 @@ body {
   background: white;
   border-radius: 14px;
   padding: 20px;
-  box-shadow: 0 8px 28px rgba(0,0,0,0.08);
-  position: sticky;
-  top: 20px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
 }
 
 h1 {
@@ -41,13 +37,12 @@ h1 {
 }
 
 h2 {
-  margin: 18px 0 8px;
-  font-size: 18px;
+  margin: 0 0 14px;
+  font-size: 22px;
 }
 
 .subtext,
 .tip {
-  margin: 0 0 14px;
   color: #555;
   font-size: 14px;
   line-height: 1.4;
@@ -94,10 +89,6 @@ button {
   cursor: pointer;
 }
 
-button:hover {
-  opacity: 0.85;
-}
-
 button.danger {
   background: #a82020;
 }
@@ -110,6 +101,7 @@ hr {
 
 .preview-area {
   min-width: 0;
+  overflow: auto;
 }
 
 .preview-header {
@@ -117,10 +109,6 @@ hr {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
-}
-
-.preview-header h2 {
-  margin: 0;
 }
 
 #countBadge {
@@ -132,21 +120,22 @@ hr {
 }
 
 .print-area {
-  display: grid;
-  gap: 18px;
+  width: fit-content;
+  transform: scale(0.72);
+  transform-origin: top left;
 }
 
+/* Label real size */
 .label {
   width: var(--label-width);
   height: var(--label-height);
-  background: var(--paper-bg);
-  border: var(--border-width) solid var(--ink);
-  border-radius: var(--border-radius);
+  background: var(--paper);
+  border: 1.2mm solid var(--ink);
+  border-radius: 8mm;
   color: var(--ink);
   overflow: hidden;
   page-break-after: always;
   break-after: page;
-  transform-origin: top left;
 }
 
 .content {
@@ -156,52 +145,51 @@ hr {
   position: relative;
 }
 
+/* Main rows */
 .data-row {
   display: grid;
-  grid-template-columns: 35mm 1fr;
+  grid-template-columns: 34mm 1fr;
   align-items: start;
 }
 
 .model-row {
-  height: 34mm;
-}
-
-.sn-row {
   height: 35mm;
 }
 
+.sn-row {
+  height: 34mm;
+}
+
 .left-title {
-  font-size: 11.5mm;
+  font-size: 11mm;
   line-height: 13mm;
   font-weight: 400;
-  letter-spacing: -0.2mm;
 }
 
 .barcode-block {
   text-align: center;
-  padding-top: 0.5mm;
 }
 
 .value-text {
   font-family: "Times New Roman", Times, serif;
   font-weight: 700;
   font-size: 10.5mm;
-  line-height: 11.5mm;
-  letter-spacing: 0.25mm;
+  line-height: 11mm;
   white-space: nowrap;
 }
 
 .barcode {
   width: 86mm;
-  height: 16.5mm;
+  height: 17mm;
   display: block;
-  margin: 1.8mm auto 0;
+  margin: 2mm auto 0;
 }
 
+/* Bottom row */
 .bottom-row {
   position: absolute;
   left: 15mm;
-  right: 11mm;
+  right: 13mm;
   bottom: 8mm;
   display: flex;
   justify-content: space-between;
@@ -209,8 +197,8 @@ hr {
 }
 
 .date-box {
-  font-size: 10.5mm;
-  line-height: 12mm;
+  font-size: 10mm;
+  line-height: 11mm;
   white-space: nowrap;
 }
 
@@ -218,23 +206,26 @@ hr {
   margin-right: 8mm;
 }
 
+.brand-logo-img,
 .brand-logo {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 11mm;
-  font-weight: 700;
-  letter-spacing: -0.4mm;
+  width: 40mm;
+  max-height: 13mm;
+  object-fit: contain;
+  display: block;
 }
 
-@media (max-width: 1000px) {
+/* Small screens */
+@media screen and (max-width: 1000px) {
   .app-shell {
     grid-template-columns: 1fr;
   }
 
-  .panel {
-    position: static;
+  .print-area {
+    transform: scale(0.62);
   }
 }
 
+/* Print must stay real size */
 @media print {
   @page {
     size: 150mm 100mm;
@@ -244,6 +235,7 @@ hr {
   html,
   body {
     width: 150mm;
+    height: 100mm;
     margin: 0;
     padding: 0;
     background: white;
@@ -260,39 +252,16 @@ hr {
   .preview-area {
     margin: 0;
     padding: 0;
+    overflow: visible;
   }
 
   .print-area {
-    display: block;
-    gap: 0;
+    transform: none !important;
+    width: 150mm;
   }
 
   .label {
     margin: 0;
     box-shadow: none;
-    page-break-after: always;
-    break-after: page;
   }
-  .brand-logo-img {
-  width: 42mm;
-  max-height: 14mm;
-  object-fit: contain;
-  display: block;
-}
-
-.bottom-row {
-  position: absolute;
-  left: 15mm;
-  right: 12mm;
-  bottom: 8mm;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.date-box {
-  font-size: 10mm;
-  line-height: 11mm;
-  white-space: nowrap;
-}
 }
