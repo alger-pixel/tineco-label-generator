@@ -118,18 +118,22 @@ hr {
   font-size: 13px;
 }
 
+/* ---------- SCREEN PREVIEW ---------- */
+
 .print-area {
   width: fit-content;
-  transform: scale(0.72);
+  transform: scale(0.75);
   transform-origin: top left;
 }
+
+/* ---------- LABEL ---------- */
 
 .label {
   width: var(--label-width);
   height: var(--label-height);
   background: var(--paper);
-  border: 1.2mm solid var(--ink);
-  border-radius: 8mm;
+  border: none;
+  border-radius: 0;
   color: var(--ink);
   overflow: hidden;
 }
@@ -137,18 +141,19 @@ hr {
 .content {
   width: 100%;
   height: 100%;
-  padding: 12mm 12mm 8mm 15mm;
+  padding: 12mm 10mm 8mm 14mm;
   position: relative;
 }
 
+/* ---------- MODEL ---------- */
+
 .data-row {
   display: grid;
-  grid-template-columns: 34mm 1fr;
-  align-items: start;
+  grid-template-columns: 32mm 1fr;
 }
 
 .model-row {
-  height: 35mm;
+  height: 32mm;
 }
 
 .sn-row {
@@ -156,8 +161,8 @@ hr {
 }
 
 .left-title {
-  font-size: 11mm;
-  line-height: 13mm;
+  font-size: 10.5mm;
+  line-height: 12mm;
   font-weight: 400;
 }
 
@@ -166,25 +171,28 @@ hr {
 }
 
 .value-text {
-  font-family: "Times New Roman", Times, serif;
-  font-weight: 700;
-  font-size: 10.5mm;
+  font-family: "Times New Roman", serif;
+  font-weight: 400;
+  font-size: 10mm;
   line-height: 11mm;
   white-space: nowrap;
 }
 
 .barcode {
-  width: 86mm;
-  height: 17mm;
+  width: 92mm;
+  height: 16mm;
   display: block;
   margin: 2mm auto 0;
 }
 
+/* ---------- BOTTOM ROW ---------- */
+
 .bottom-row {
   position: absolute;
-  left: 15mm;
-  right: 13mm;
-  bottom: 8mm;
+  left: 14mm;
+  right: 12mm;
+  bottom: 10mm;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -202,13 +210,16 @@ hr {
 
 .brand-logo-img,
 .brand-logo {
-  width: 40mm;
-  max-height: 13mm;
+  width: 38mm;
+  max-height: 10mm;
   object-fit: contain;
   display: block;
 }
 
+/* ---------- MOBILE ---------- */
+
 @media screen and (max-width: 1000px) {
+
   .app-shell {
     grid-template-columns: 1fr;
   }
@@ -218,7 +229,10 @@ hr {
   }
 }
 
+/* ---------- PRINT ---------- */
+
 @media print {
+
   @page {
     size: 150mm 100mm;
     margin: 0;
@@ -253,9 +267,9 @@ hr {
   }
 
   .label {
-    margin: 0;
     border: none !important;
     border-radius: 0 !important;
+    margin: 0;
     box-shadow: none;
   }
 }
