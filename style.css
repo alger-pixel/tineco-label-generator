@@ -273,4 +273,26 @@ hr {
     page-break-after: always;
     break-after: page;
   }
+  .brand-logo-img {
+  width: 42mm;
+  max-height: 14mm;
+  object-fit: contain;
+  display: block;
+}
+
+.bottom-row {
+  position: absolute;
+  left: 15mm;
+  right: 12mm;
+  bottom: 8mm;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.date-box {
+  font-size: 10mm;
+  line-height: 11mm;
+  white-space: nowrap;
+}
 }
