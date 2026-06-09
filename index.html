@@ -1,134 +1,316 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+const modelInput = document.getElementById("modelInput");
+const snInput = document.getElementById("snInput");
+const dateInput = document.getElementById("dateInput");
 
-  <title>Tineco Label Generator V2</title>
+const addBtn = document.getElementById("addBtn");
+const printCurrentBtn = document.getElementById("printCurrentBtn");
+const printAllBtn = document.getElementById("printAllBtn");
+const clearBtn = document.getElementById("clearBtn");
+const fileInput = document.getElementById("fileInput");
+const downloadTemplateBtn = document.getElementById("downloadTemplateBtn");
 
-  <link rel="stylesheet" href="style.css" />
+const offsetXInput = document.getElementById("offsetXInput");
+const offsetYInput = document.getElementById("offsetYInput");
+const scaleInput = document.getElementById("scaleInput");
 
-  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-</head>
+const printArea = document.getElementById("printArea");
+const countBadge = document.getElementById("countBadge");
 
-<body>
-  <main class="app-shell">
+let labels = [
+  {
+    model: "FW0704BOUS",
+    sn: "TCN7YXNJJ7940",
+    date: "JUN-2026"
+  }
+];
 
-    <section class="panel no-print">
-      <h1>Tineco Label Generator V2</h1>
-      <p class="subtext">100 × 150 mm thermal label, landscape layout.</p>
+function cleanValue(value) {
+  return String(value || "").trim().toUpperCase();
+}
 
-      <div class="form-grid">
-        <label>
-          Model Number
-          <input id="modelInput" value="FW0704BOUS" autocomplete="off" />
-        </label>
+function getCurrentLabel() {
+  return {
+    model: cleanValue(modelInput.value),
+    sn: cleanValue(snInput.value),
+    date: cleanValue(dateInput.value) || "JUN-2026"
+  };
+}
 
-        <label>
-          S/N Number
-          <input id="snInput" value="TCN7YXNJJ7940" autocomplete="off" />
-        </label>
+function validateLabel(label) {
+  if (!label.model) {
+    alert("Model Number is required.");
+    return false;
+  }
 
-        <label>
-          Date
-          <input id="dateInput" value="JUN-2026" autocomplete="off" />
-        </label>
+  if (!label.sn) {
+    alert("S/N Number is required.");
+    return false;
+  }
+
+  return true;
+}
+
+function createLabelElement(item) {
+  const article = document.createElement("article");
+  article.className = "label";
+
+  const x = Number(offsetXInput.value || 0);
+  const y = Number(offsetYInput.value || 0);
+  const scale = Number(scaleInput.value || 100) / 100;
+
+  article.style.transform = `translate(${x}mm, ${y}mm) scale(${scale})`;
+
+  article.innerHTML = `
+    <div class="content">
+
+      <div class="data-row model-row">
+        <div class="left-title">Model:</div>
+
+        <div class="barcode-block">
+          <div class="value-text">${item.model}</div>
+          <svg class="barcode model-barcode"></svg>
+        </div>
       </div>
 
-      <div class="button-row">
-        <button id="addBtn">Add / Update Label</button>
-        <button id="printCurrentBtn">Print Current</button>
-        <button id="printAllBtn">Print All</button>
-        <button id="clearBtn" class="danger">Clear List</button>
+      <div class="data-row sn-row">
+        <div class="left-title">S/N:</div>
+
+        <div class="barcode-block">
+          <div class="value-text">${item.sn}</div>
+          <svg class="barcode sn-barcode"></svg>
+        </div>
       </div>
 
-      <hr />
-
-      <h2>Batch Import</h2>
-      <p class="subtext">
-        Excel/CSV columns accepted: <b>MODEL</b>, <b>SN</b>, <b>DATE</b>.
-        DATE is optional.
-      </p>
-
-      <input id="fileInput" type="file" accept=".xlsx,.xls,.csv" />
-
-      <div class="button-row">
-        <button id="downloadTemplateBtn">Download CSV Template</button>
-      </div>
-
-      <hr />
-
-      <h2>Thermal Printer Calibration</h2>
-
-      <div class="form-grid small">
-        <label>
-          Horizontal Offset mm
-          <input id="offsetXInput" type="number" value="0" step="0.5" />
-        </label>
-
-        <label>
-          Vertical Offset mm
-          <input id="offsetYInput" type="number" value="0" step="0.5" />
-        </label>
-
-        <label>
-          Scale %
-          <input id="scaleInput" type="number" value="100" step="1" />
-        </label>
-      </div>
-
-      <p class="tip">
-        Print setting: paper size <b>100 × 150 mm</b>, orientation <b>landscape</b>, scale <b>100%</b>.
-      </p>
-    </section>
-
-    <section class="preview-area">
-      <div class="preview-header no-print">
-        <h2>Live Preview</h2>
-        <span id="countBadge">1 label</span>
-      </div>
-
-      <div id="printArea" class="print-area"></div>
-    </section>
-
-  </main>
-
-  <template id="labelTemplate">
-    <article class="label">
-      <div class="content">
-
-        <div class="data-row model-row">
-          <div class="left-title">Model:</div>
-
-          <div class="barcode-block">
-            <div class="value-text model-text"></div>
-            <svg class="barcode model-barcode"></svg>
-          </div>
+      <div class="bottom-row">
+        <div class="date-box">
+          <span class="date-title">Date:</span>
+          <span>${item.date}</span>
         </div>
 
-        <div class="data-row sn-row">
-          <div class="left-title">S/N:</div>
-
-          <div class="barcode-block">
-            <div class="value-text sn-text"></div>
-            <svg class="barcode sn-barcode"></svg>
-          </div>
-        </div>
-
-        <div class="bottom-row">
-          <div class="date-box">
-            <span class="date-title">Date:</span>
-            <span class="date-text"></span>
-          </div>
-
-          <img src="tineco-logo.png.png" class="brand-logo" alt="Tineco Logo" />
-        </div>
-
+        <img src="tineco-logo.png" class="brand-logo" alt="Tineco Logo">
       </div>
-    </article>
-  </template>
 
-  <script src="script.js"></script>
-</body>
-</html>
+    </div>
+  `;
+
+  return article;
+}
+
+function renderLabels(list = labels) {
+  printArea.innerHTML = "";
+
+  list.forEach((item) => {
+    const labelElement = createLabelElement(item);
+    printArea.appendChild(labelElement);
+
+    const modelBarcode = labelElement.querySelector(".model-barcode");
+    const snBarcode = labelElement.querySelector(".sn-barcode");
+
+    if (typeof JsBarcode !== "undefined") {
+      JsBarcode(modelBarcode, item.model, {
+        format: "CODE128",
+        displayValue: false,
+        width: 2,
+        height: 60,
+        margin: 0
+      });
+
+      JsBarcode(snBarcode, item.sn, {
+        format: "CODE128",
+        displayValue: false,
+        width: 2,
+        height: 60,
+        margin: 0
+      });
+    } else {
+      console.error("JsBarcode library is not loaded.");
+    }
+  });
+
+  if (countBadge) {
+    countBadge.textContent = `${list.length} label${list.length === 1 ? "" : "s"}`;
+  }
+}
+
+function addOrUpdateLabel() {
+  const label = getCurrentLabel();
+
+  if (!validateLabel(label)) return;
+
+  const existingIndex = labels.findIndex((x) => x.sn === label.sn);
+
+  if (existingIndex >= 0) {
+    labels[existingIndex] = label;
+  } else {
+    labels.push(label);
+  }
+
+  renderLabels(labels);
+}
+
+function printCurrentLabel() {
+  const label = getCurrentLabel();
+
+  if (!validateLabel(label)) return;
+
+  renderLabels([label]);
+  window.print();
+  renderLabels(labels);
+}
+
+function printAllLabels() {
+  if (!labels.length) {
+    alert("No labels to print.");
+    return;
+  }
+
+  renderLabels(labels);
+  window.print();
+}
+
+function clearLabels() {
+  if (!confirm("Clear all labels?")) return;
+
+  labels = [];
+  renderLabels(labels);
+}
+
+function downloadTemplate() {
+  const csv =
+    "MODEL,SN,DATE\n" +
+    "FW0704BOUS,TCN7YXNJJ7940,JUN-2026\n" +
+    "FW0704BOUS,TCN7YXNJJ7941,JUN-2026\n";
+
+  const blob = new Blob([csv], {
+    type: "text/csv;charset=utf-8"
+  });
+
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "tineco-label-template.csv";
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+function normalizeHeader(name) {
+  return String(name || "")
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, "")
+    .replace(/[^A-Z0-9]/g, "");
+}
+
+function getField(row, possibleNames) {
+  const keys = Object.keys(row);
+
+  for (const key of keys) {
+    const normalized = normalizeHeader(key);
+
+    if (possibleNames.includes(normalized)) {
+      return row[key];
+    }
+  }
+
+  return "";
+}
+
+async function importSpreadsheet(file) {
+  if (typeof XLSX === "undefined") {
+    alert("Excel library is not loaded.");
+    return;
+  }
+
+  const data = await file.arrayBuffer();
+
+  const workbook = XLSX.read(data, {
+    type: "array"
+  });
+
+  const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+
+  const rows = XLSX.utils.sheet_to_json(firstSheet, {
+    defval: ""
+  });
+
+  const imported = rows
+    .map((row) => {
+      return {
+        model: cleanValue(
+          getField(row, ["MODEL", "MODELNUMBER", "MORDEL", "MORDELNUMBER"])
+        ),
+        sn: cleanValue(
+          getField(row, ["SN", "SNNUMBER", "SERIAL", "SERIALNUMBER"])
+        ),
+        date:
+          cleanValue(getField(row, ["DATE", "PRODUCTIONDATE"])) ||
+          cleanValue(dateInput.value) ||
+          "JUN-2026"
+      };
+    })
+    .filter((x) => x.model && x.sn);
+
+  if (!imported.length) {
+    alert("No valid rows found. Please use columns MODEL and SN.");
+    return;
+  }
+
+  labels = imported;
+
+  modelInput.value = labels[0].model;
+  snInput.value = labels[0].sn;
+  dateInput.value = labels[0].date;
+
+  renderLabels(labels);
+
+  alert(`${labels.length} labels imported.`);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderLabels([getCurrentLabel()]);
+
+  modelInput.addEventListener("input", () => {
+    renderLabels([getCurrentLabel()]);
+  });
+
+  snInput.addEventListener("input", () => {
+    renderLabels([getCurrentLabel()]);
+  });
+
+  dateInput.addEventListener("input", () => {
+    renderLabels([getCurrentLabel()]);
+  });
+
+  offsetXInput.addEventListener("input", () => {
+    renderLabels([getCurrentLabel()]);
+  });
+
+  offsetYInput.addEventListener("input", () => {
+    renderLabels([getCurrentLabel()]);
+  });
+
+  scaleInput.addEventListener("input", () => {
+    renderLabels([getCurrentLabel()]);
+  });
+
+  addBtn.addEventListener("click", addOrUpdateLabel);
+  printCurrentBtn.addEventListener("click", printCurrentLabel);
+  printAllBtn.addEventListener("click", printAllLabels);
+  clearBtn.addEventListener("click", clearLabels);
+  downloadTemplateBtn.addEventListener("click", downloadTemplate);
+
+  fileInput.addEventListener("change", async (event) => {
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    try {
+      await importSpreadsheet(file);
+    } catch (error) {
+      console.error(error);
+      alert("File import failed. Please check your Excel/CSV format.");
+    }
+  });
+});
